@@ -1,1 +1,5 @@
-console.log("Hello from Jenkins!");
+function greet(name) {
+    return `Hello ${name}`;
+}
+
+module.exports = { greet };
