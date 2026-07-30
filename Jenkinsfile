@@ -2,15 +2,24 @@ pipeline {
 
     agent any
 
-    environment {
-        SLACK_WEBHOOK = credentials('slack-webhook')
-    }
-
     stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Build') {
             steps {
-                echo "Building..."
+                sh 'npm install'
+                
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test'
             }
         }
 
@@ -18,21 +27,35 @@ pipeline {
 
     post {
 
-        success {
+    success {
 
-            httpRequest(
-                httpMode: 'POST',
-                url: SLACK_WEBHOOK,
-                contentType: 'APPLICATION_JSON',
-                requestBody: '''
-                {
-                    "text":"✅ Jenkins Build Successful"
-                }
-                '''
-            )
-
-        }
-
+        httpRequest(
+            httpMode: 'POST',
+            url: SLACK_WEBHOOK,
+            contentType: 'APPLICATION_JSON',
+            requestBody: '''
+            {
+    "text": "🚀 *${env.JOB_NAME}*\\nBuild: #${env.BUILD_NUMBER}\\nStatus: SUCCESS\\nURL: ${env.BUILD_URL}"
+            }
+            '''
+        )
     }
+
+    failure {
+
+        httpRequest(
+            httpMode: 'POST',
+            url: SLACK_WEBHOOK,
+            contentType: 'APPLICATION_JSON',
+            requestBody: '''
+            {
+                "text": "❌ *${env.JOB_NAME}*\\nBuild: #${env.BUILD_NUMBER}\\nStatus: FAILURE\\nURL: ${env.BUILD_URL}"
+            }
+            '''
+        )
+    }
+
+}
+
 
 }
