@@ -27,6 +27,13 @@ pipeline {
                 sh 'npm test'
             }
         }
+        stage('run application')
+        
+        {
+            steps{
+                sh 'npm start'
+            }
+        }
 
         stage('Success Message') {
             steps {
