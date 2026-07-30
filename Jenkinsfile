@@ -10,51 +10,31 @@ pipeline {
             }
         }
 
-        stage('Node Version') {
-            steps {
-                sh 'node --version'
-            }
-        }
-
-        stage('Install') {
+        stage('Build') {
             steps {
                 sh 'npm install'
+                sh 'npm run build'
             }
         }
 
-        stage('Run Test') {
+        stage('Test') {
             steps {
                 sh 'npm test'
             }
         }
-        stage('run application')
-        
-        {
-            steps{
-                sh 'npm start'
-            }
-        }
 
-        stage('Success Message') {
-            steps {
-                echo 'Pipeline executed successfully!'
-            }
-        }
     }
 
     post {
 
         success {
-            echo 'Build Success '
+            echo "Build Successful"
         }
 
         failure {
-            echo 'Build Failed '
+            echo "Build Failed"
         }
 
-        always {
-            echo 'Pipeline Finished'
-        }
     }
 
 }
