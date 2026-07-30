@@ -1,5 +1,4 @@
-import app from "./app";
-const { greet } = app;
+const { greet } = require("./app");
 
 if (greet("Syam") === "Hello Syam") {
     console.log("✅ Test Passed");
