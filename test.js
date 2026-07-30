@@ -1,4 +1,4 @@
-const { greet } = require("./app");
+const { greet } = require("./app").default;
 
 if (greet("Syam") === "Hello Syam") {
     console.log("✅ Test Passed");
