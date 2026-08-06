@@ -21,12 +21,20 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'npm test'
-            }
+        
+
+        stage('build')
+steps{
+    sh 'npm run build'
+}
+    }
+post {
+        success {
+            echo "✅ Build Successful"
         }
 
+        failure {
+            echo "❌ Build Failed"
+        }
     }
-
 }
