@@ -1,40 +1,36 @@
 pipeline {
-
     agent any
 
-
-    tools{
+    tools {
         nodejs 'node22'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('install') {
+        stage('Install dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install --no-audit --no-fund'
             }
         }
 
-        
-
-        stage('build')
-steps{
-    sh 'npm run build'
-}
-    }
-post {
-        success {
-            echo "✅ Build Successful"
+        stage('Run app') {
+            steps {
+                sh 'node app.js'
+            }
         }
+    }
 
+    post {
+        success {
+            echo '✅ Pipeline completed successfully'
+        }
         failure {
-            echo "❌ Build Failed"
+            echo '❌ Pipeline failed'
         }
     }
 }
